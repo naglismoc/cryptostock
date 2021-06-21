@@ -24,7 +24,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'stocks'], function(){
-      Route::get('/data/{stock}', [App\Http\Controllers\StockController::class, 'data'])->name('stock.data');
       Route::get('/index', [App\Http\Controllers\StockController::class, 'index'])->name('stock.index');
       Route::get('/show/{stock}', [App\Http\Controllers\StockController::class, 'show'])->name('stock.show');
         Route::get('/create', [App\Http\Controllers\StockController::class, 'create'])->name('stock.create');
@@ -40,7 +39,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['auth']], function () {
       Route::group(['prefix' => 'orders'], function(){
         Route::get('/index', [App\Http\Controllers\OrderController::class, 'index'])->name('order.index');
-        Route::get('/show/{stock}', [App\Http\Controllers\OrderController::class, 'show'])->name('order.show');
+        Route::get('/data/{stock}', [App\Http\Controllers\OrderController::class, 'data'])->name('order.data');
+        Route::get('/dataStepped/{stock}', [App\Http\Controllers\OrderController::class, 'dataStepped'])->name('order.dataStepped');
+          Route::get('/show/{stock}', [App\Http\Controllers\OrderController::class, 'show'])->name('order.show');
           Route::get('/create', [App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
           Route::get('/edit/{stock}', [App\Http\Controllers\OrderController::class, 'edit'])->name('order.edit');
           Route::post('/update/{stock}', [App\Http\Controllers\OrderController::class, 'update'])->name('order.update');

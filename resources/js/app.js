@@ -4,6 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const { default: axios } = require('axios');
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -30,39 +32,74 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
 });
-window.onload = generateTable();
 
-function generateTable() {
+urlArr = window.location.href.split("/");
+stockId = urlArr[urlArr.length - 1];
+
+
+document.getElementById('click').addEventListener('click', function() {
     google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart2);
     google.charts.setOnLoadCallback(drawChart);
-    drawChart();
+
+
+
+});
+
+function drawChart2() {
+    console.log(stockId);
+    axios.get(getStockStepped, {
+            params: {
+                'stock_id': stockId
+            }
+
+        })
+        .then(response => {
+            var data = google.visualization.arrayToDataTable(JSON.parse(response.data.orders));
+
+            var options = {
+                title: 'The decline of \'The 39 Steps\'',
+                vAxis: { title: 'Accumulated Rating' },
+                isStacked: true
+            };
+
+            var chart = new google.visualization.SteppedAreaChart(document.getElementById('chart_div2'));
+            chart.draw(data, options);
+        });
+
 }
 
+
+
+
+
+
+
+
+
 function drawChart() {
-    console.log(getStock, "asasd");
 
-    axios.get(getStock).
-    then(response => {
-        console.log(typeof JSON.parse(response.data.data));
-        var data = google.visualization.arrayToDataTable(JSON.parse(response.data.data));
+    axios.get(getStock, {
+            params: {
+                'stock_id': stockId
+            }
 
-        var options = {
-            title: 'Company Performance',
-            hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
-            vAxis: { minValue: 0 }
-        };
+        })
+        .then(response => {
+            console.log(response.data.orders);
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    })
+            var data = google.visualization.arrayToDataTable(JSON.parse(response.data.orders));
 
-    ;
+            var options = {
+                title: 'Company Performance',
+                hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
+                vAxis: { minValue: 0 }
+            };
 
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
 
-
-
-
-
+        });
 
 
 

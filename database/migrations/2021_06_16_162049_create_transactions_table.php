@@ -15,7 +15,9 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            
+            $table->double('price');
+            $table->double('quantity');
+            $table->string('stock_id');
             $table->unsignedBigInteger('order_buy');
             $table->unsignedBigInteger('order_sell');
             $table->foreign('order_buy')->references('id')->on('orders');

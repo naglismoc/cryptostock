@@ -63,19 +63,7 @@ class StockController extends Controller
     {
         return view('stocks.show',['stock' => $stock]);
     }
-    public function data(Stock $stock)
-    {
-        $orders = Order::all();
-        $data = [['trades', 'buy', 'sell']];
-        foreach ($orders as $order) {
-            $data[]= ['yes',$order->price, $order->quantity];
-        }
-        return Response::json([
-            'status' => '200',  // cia yra bilekas
-            'data' => json_encode($data)
-           
-        ]);
-    }
+    
 
     /**
      * Show the form for editing the specified resource.

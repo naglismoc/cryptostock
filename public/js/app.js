@@ -1875,13 +1875,14 @@ __webpack_require__.r(__webpack_exports__);
   \*****************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
+    axios = _require["default"];
+
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
@@ -1905,21 +1906,44 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app'
 });
-window.onload = generateTable();
-
-function generateTable() {
+urlArr = window.location.href.split("/");
+stockId = urlArr[urlArr.length - 1];
+document.getElementById('click').addEventListener('click', function () {
   google.charts.load('current', {
     'packages': ['corechart']
   });
+  google.charts.setOnLoadCallback(drawChart2);
   google.charts.setOnLoadCallback(drawChart);
-  drawChart();
+});
+
+function drawChart2() {
+  console.log(stockId);
+  axios.get(getStockStepped, {
+    params: {
+      'stock_id': stockId
+    }
+  }).then(function (response) {
+    var data = google.visualization.arrayToDataTable(JSON.parse(response.data.orders));
+    var options = {
+      title: 'The decline of \'The 39 Steps\'',
+      vAxis: {
+        title: 'Accumulated Rating'
+      },
+      isStacked: true
+    };
+    var chart = new google.visualization.SteppedAreaChart(document.getElementById('chart_div2'));
+    chart.draw(data, options);
+  });
 }
 
 function drawChart() {
-  console.log(getStock, "asasd");
-  axios.get(getStock).then(function (response) {
-    console.log(_typeof(JSON.parse(response.data.data)));
-    var data = google.visualization.arrayToDataTable(JSON.parse(response.data.data));
+  axios.get(getStock, {
+    params: {
+      'stock_id': stockId
+    }
+  }).then(function (response) {
+    console.log(response.data.orders);
+    var data = google.visualization.arrayToDataTable(JSON.parse(response.data.orders));
     var options = {
       title: 'Company Performance',
       hAxis: {

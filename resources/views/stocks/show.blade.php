@@ -1,7 +1,8 @@
 <script>
-    const getStock = "{{route('stock.data',$stock)}}";
-  </script>
-   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    const getStock = "{{route('order.data',$stock)}}";
+    const getStockStepped = "{{route('order.dataStepped',$stock)}}";
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 @extends('layouts.app')
 
 @section('content')
@@ -32,9 +33,11 @@
            
           
         </form>
-        <div id="chart_div" style="width: 100%; height: 500px;"></div>
-       
-
+       <div id="click" class="btn btn-primary">paspausk mane</div>
+            <div id="atvaizdavimui"></div>
+            <div id="chart_div2" style="width: 100%; height: 500px;"></div>
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+            
                 </div>
             </div>
         </div>
